@@ -1,0 +1,6 @@
+---
+- name: "Preflight Checks"
+  include_tasks: "00-preflight-checks.yml"
+  
+- name: "Configure Kibana"
+  include_tasks: "01-configure.yml"

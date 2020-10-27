@@ -1,0 +1,23 @@
+---
+server:
+  port: 5601
+  host: "{{ hostvars[inventory_hostname].ansible_default_ipv4.address }}"
+  name: "{{ inventory_hostname_short }}"
+  ssl:
+    enabled: false
+    certificate: ""
+    key: ""
+
+elasticsearch_hosts_group_name: "elasticsearch_master"
+elasticsearch_username: ""
+elasticsearch_password: ""
+elasticsearch_ssl_certificate_authorities:
+- ""
+
+elasticsearch:
+  username: "{{ elasticsearch_username }}"
+  password: "{{ elasticsearch_password }}"
+  ssl:
+    certificateAuthorities: "{{ elasticsearch_ssl_certificate_authorities }}"
+
+  
