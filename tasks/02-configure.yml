@@ -1,0 +1,10 @@
+---
+- name: "Template Kibana configuration"
+  template:
+    src: "kibana.yml.j2"
+    dest: "/etc/kibana/kibana.yml"
+  notify: "Restart Kibana"
+  become: true
+
+- name: "Flush handlers"
+  meta: flush_handlers
