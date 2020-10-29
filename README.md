@@ -1,38 +1,73 @@
-Role Name
+plrr.kibana-configuration
 =========
 
-A brief description of the role goes here.
+Configure Kibana.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+- Kibana installed on target host.
+- Elasticsearch masters in the inventory.
+- CA and certificate if ssl enabled.
+- A builtin password file for the `kibana_system` user
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+```yaml
+---
+# Server and certificates variables
+server:
+  port: 5601
+  host: "{{ hostvars[inventory_hostname].ansible_default_ipv4.address }}"
+  name: "{{ inventory_hostname_short }}"
+  ssl:
+    enabled: false
+    certificate: ""
+    key: ""
+    key_passphrase: ""
+
+# utility variables to set kibana.yml parameters
+elasticsearch_hosts_group_name: "elasticsearch_master"
+kibana_user: ""
+kibana_password: ""
+elasticsearch_ssl_certificate_authorities:
+- ""
+
+elasticsearch:
+  username: "{{ kibana_user }}"
+  password: "{{ kibana_password }}"
+  ssl:
+    certificateAuthorities: "{{ elasticsearch_ssl_certificate_authorities }}"
+  http_port: 9200
+```
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+None.
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+```yaml
+- name: "Configure Kibana"
+  hosts: kibana
+  roles:
+  - { role: plrr.kibana-configuration }
+  vars_files:
+  - vars/kibana-config.yml
+```
 
 License
 -------
 
-BSD
+Apache-2
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Get in touch with me at:
+- [LinkedIn](www.linkedin.com/in/phil-ranzato-47b8bb194)
+- [GitHub](https://github.com/PhilRanzato)
+- [Medium](https://medium.com/@philranzato)
