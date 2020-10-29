@@ -2,5 +2,8 @@
 - name: "Preflight Checks"
   include_tasks: "00-preflight-checks.yml"
   
+- name: "Get kibana user password"
+  include_tasks: "01-kibana-user.yml"
+
 - name: "Configure Kibana"
-  include_tasks: "01-configure.yml"
+  include_tasks: "02-configure.yml"

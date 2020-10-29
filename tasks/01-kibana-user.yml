@@ -1,0 +1,22 @@
+---
+- name: "Slurp builtin password file"
+  slurp:
+    path: "{{ playbook_dir }}/files/builtin_passwords.json"
+  register: builtin_pass
+  when: kibana_password | length == 0
+  delegate_to: localhost
+
+- name: "Get the password of {{ kibana_user }} if the user exists"
+  when: kibana_password | length == 0
+  delegate_to: localhost
+  block:
+
+  - name: "Get the password of {{ kibana_user }}"
+    set_fact:
+      kibana_password: "{{ builtin_pass.content | b64decode | from_json | json_query(query) }}"
+    vars:
+      query: "[?user=='{{ kibana_user }}'].password | [0]"
+
+  rescue:
+  - name: "End the playbook since {{ kibana_user }} password is not present in the file"
+    meta: end_play
